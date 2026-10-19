@@ -1,0 +1,6 @@
+{
+  "name": "AetherLauncher",
+  "description": "Lanzador de aplicaciones de escritorio y TV estilo Netflix/Playnite con soporte completo para mandos, teclado/ratón y personalización visual al 100%.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
