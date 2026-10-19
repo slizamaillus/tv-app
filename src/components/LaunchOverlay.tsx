@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Play, Check, ExternalLink, X, RotateCcw, Copy } from 'lucide-react';
 import { AppItem } from '../types/launcher';
+import { launchExternal } from '../services/host';
 
 interface Props {
   app: AppItem | null;
@@ -23,22 +24,8 @@ export const LaunchOverlay: React.FC<Props> = ({
       setProgress(0);
       setCopied(false);
 
-      // Trigger URL / URI launch
-      try {
-        if (app.path.startsWith('http://') || app.path.startsWith('https://')) {
-          window.open(app.path, '_blank', 'noopener,noreferrer');
-        } else {
-          // Protocol handlers (steam://, spotify:, discord:, vlc:, etc.)
-          const link = document.createElement('a');
-          link.href = app.path;
-          link.rel = 'noreferrer';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-      } catch (err) {
-        console.warn('Protocol handler launch error:', err);
-      }
+      // Trigger URL / URI / local path launch
+      launchExternal(app.path);
 
       // Animate launch bar
       const interval = setInterval(() => {
@@ -63,13 +50,7 @@ export const LaunchOverlay: React.FC<Props> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const relaunch = () => {
-    if (app.path.startsWith('http')) {
-      window.open(app.path, '_blank', 'noopener,noreferrer');
-    } else {
-      window.location.href = app.path;
-    }
-  };
+  const relaunch = () => launchExternal(app.path);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl animate-fadeIn select-none">
